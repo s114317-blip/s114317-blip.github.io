@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>破繭成詩｜水墨養成</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="frame">
+    <header class="title">
+      <div class="seal">印</div>
+      <h1>破繭成詩</h1>
+      <p class="subtitle">Caterpillar → Chrysalis → Butterfly</p>
+    </header>
+
+    <section class="panel">
+      <p class="intro">
+        你將陪伴一隻毛毛蟲，在葉影與日光之間緩慢成長。<br/>
+        每一次動作都會引來一句詩；每一次進化，都會解鎖一段意境。
+      </p>
+
+      <div class="game">
+        <div class="scene">
+          <div id="stageBadge" class="badge">毛毛蟲</div>
+          <div id="creature" class="creature caterpillar" aria-label="creature"></div>
+          <div class="inkwash"></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="label">成長</div>
+            <div class="bar"><div id="growthBar" class="fill"></div></div>
+            <div id="growthText" class="value">0 / 100</div>
+          </div>
+
+          <div class="stat">
+            <div class="label">生命</div>
+            <div class="bar thin"><div id="hpBar" class="fill"></div></div>
+            <div id="hpText" class="value">10 / 10</div>
+          </div>
+
+          <div class="stat">
+            <div class="label">心境</div>
+            <div class="bar thin"><div id="moodBar" class="fill"></div></div>
+            <div id="moodText" class="value">5 / 10</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="btnFeed">🌿 餵食</button>
+          <button class="btn" id="btnSun">☀️ 曬陽</button>
+          <button class="btn" id="btnRest">💤 歇息</button>
+          <button class="btn ghost" id="btnReset">↺ 重來</button>
+        </div>
+
+        <!-- 方式2：按鈕觸發詩句（短卡） -->
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+        <!-- 方式1：進化解鎖詩句（大卡） -->
+        <div id="modal" class="modal hidden" aria-hidden="true">
+          <div class="modalCard">
+            <div class="modalHeader">
+              <span id="modalTitle" class="modalTitle">進化</span>
+              <button id="modalClose" class="close">✕</button>
+            </div>
+            <div id="modalPoem" class="modalPoem"></div>
+            <div id="modalAuthor" class="modalAuthor"></div>
+            <div class="modalHint">（點右上角關閉，繼續養成）</div>
+          </div>
+        </div>
+
+        <!-- 方式3：結局 -->
+        <div id="ending" class="ending hidden" aria-hidden="true">
+          <div class="endingCard">
+            <h2 id="endingTitle">結局</h2>
+            <div id="endingPoem" class="endingPoem"></div>
+            <div class="endingTools">
+              <button class="btn" id="btnCopy">複製結局文字</button>
+              <button class="btn ghost" id="btnBack">回到封面</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footnote">
+        <span>水墨樣式：宣紙底 × 墨暈 × 印章點綴</span>
+      </footer>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
