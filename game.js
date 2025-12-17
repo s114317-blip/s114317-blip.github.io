@@ -1,3 +1,4 @@
+console.log("JS loaded");
 :root{
   --ink:#1d1d1f;
   --soft:#2b2b2b;
