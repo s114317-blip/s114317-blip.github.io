@@ -471,6 +471,15 @@ document.addEventListener("DOMContentLoaded", function () {
   btnHide.addEventListener("click", function(){ resolveEnemy("hide"); });
   btnScare.addEventListener("click", function(){ resolveEnemy("scare"); });
   btnRun.addEventListener("click", function(){ resolveEnemy("run"); });
+  // 防卡死：點黑色背景也能關閉天敵視窗
+enemy.addEventListener("click", function(e){
+  if(e.target === enemy){
+    enemy.classList.add("hidden");
+    enemy.setAttribute("aria-hidden","true");
+    if (typeof enemyActive !== "undefined") enemyActive = false;
+  }
+});
+
 
   btnCopy.addEventListener("click", function(){
     var text = endingTitle.textContent + "\n" + endingPoem.textContent + "\n" + endingBreed.textContent;
