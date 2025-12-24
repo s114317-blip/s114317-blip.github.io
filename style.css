@@ -101,3 +101,62 @@ body{ display:block; }
 .creature { position: absolute; z-index: 30; pointer-events: auto; }
 .fxLayer { pointer-events: none; z-index: 40; }
 .inkwash { z-index: 1; pointer-events: none; }
+/* ===== 保命版：強制畫出毛毛蟲 ===== */
+
+.scene {
+  position: relative;
+  min-height: 100vh;
+}
+
+.creature {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 260px;
+  height: 140px;
+
+  background: linear-gradient(
+    to right,
+    #4a7c59,
+    #6fbf73,
+    #4a7c59
+  );
+
+  border-radius: 80px;
+  box-shadow: 0 0 0 6px rgba(0,0,0,0.15);
+
+  z-index: 30;
+  cursor: pointer;
+}
+
+/* 毛毛蟲節點（一節一節的感覺） */
+.creature::before,
+.creature::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  width: 80px;
+  height: 80px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+}
+
+.creature::before { left: 40px; }
+.creature::after  { right: 40px; }
+
+/* 進化階段（先保底） */
+.caterpillar { }
+.chrysalis {
+  width: 140px;
+  height: 220px;
+  border-radius: 70px;
+  background: #6b5b4b;
+}
+.butterfly {
+  width: 220px;
+  height: 160px;
+  background: radial-gradient(circle at center, #f2d16b, #d18b47);
+  border-radius: 20px;
+}
