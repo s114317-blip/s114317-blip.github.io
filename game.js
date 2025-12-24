@@ -491,6 +491,3 @@ document.addEventListener("DOMContentLoaded", function () {
   showToast("提示","按按鈕養牠；也可以戳牠互動（連戳太吵會引來天敵）。");
   render();
 });
-Saffi正在輸入
-Saffi正在輸入
-撰寫內容給Saffi Wu
