@@ -1,124 +1,97 @@
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>破繭成詩｜水墨養成</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <main class="frame">
-    <header class="title">
-      <div class="seal">印</div>
-      <h1>破繭成詩</h1>
-      <p class="subtitle">戳牠、養牠、護牠——終將化蝶</p>
-    </header>
+/* ===== 全螢幕版面 ===== */
+body{ display:block; }
+.frame{ width:100vw; min-height:100vh; padding:20px; }
+.panel.full{ min-height:calc(100vh - 80px); }
+.game{
+  display:grid;
+  grid-template-columns: 1.4fr .9fr;
+  gap:16px;
+  align-items:stretch;
+}
+.scene{ height: min(76vh, 720px); }
+.side{ display:flex; flex-direction:column; gap:12px; }
+.hint{ font-size:12px; opacity:.65; margin-top:2px; font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif; }
 
-    <section class="panel full">
-      <div class="game">
-        <div class="scene">
-          <div id="stageBadge" class="badge">毛毛蟲</div>
+@media (max-width: 900px){
+  .game{ grid-template-columns: 1fr; }
+  .scene{ height: min(60vh, 560px); }
+}
 
-          <!-- 可戳的主角 -->
-          <div id="creature" class="creature caterpillar cat-leaf" aria-label="creature"></div>
+/* ===== 特效層 ===== */
+.fxLayer{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:4; }
 
-          <!-- 特效層 -->
-          <div id="fxLayer" class="fxLayer"></div>
+.particle{
+  position:absolute;
+  left:50%; top:60%;
+  transform:translate(-50%,-50%);
+  opacity:.9;
+  animation: fly 900ms ease-out forwards;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,.12));
+}
+@keyframes fly{
+  from{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+  to  { transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.9); opacity:0; }
+}
+.p-leaf{ width:16px; height:10px; border-radius: 12px 12px 12px 0; background:rgba(0,0,0,.55); transform:rotate(20deg); }
+.p-sun{ width:14px; height:14px; border-radius:50%; background:rgba(0,0,0,.45); box-shadow:0 0 0 7px rgba(0,0,0,.08); }
+.p-dew{ width:10px; height:14px; border-radius: 50% 50% 55% 55%; background:rgba(0,0,0,.35); }
+.p-ink{ width:10px; height:10px; border-radius:50%; background:rgba(0,0,0,.35); }
 
-          <div class="inkwash"></div>
-        </div>
+/* ===== 戳毛毛蟲互動動畫 ===== */
+.creature{ cursor:pointer; }
+.poke{ animation: pokeWiggle 260ms ease-in-out 1; }
+@keyframes pokeWiggle{
+  0%{ transform:translate(-50%,-50%) scale(1); }
+  30%{ transform:translate(-50%,-52%) scale(1.04) rotate(-2deg); }
+  60%{ transform:translate(-50%,-48%) scale(0.98) rotate(2deg); }
+  100%{ transform:translate(-50%,-50%) scale(1); }
+}
 
-        <div class="side">
-          <div class="stats">
-            <div class="stat">
-              <div class="label">成長</div>
-              <div class="bar"><div id="growthBar" class="fill"></div></div>
-              <div id="growthText" class="value">0 / 100</div>
-            </div>
+/* ===== 毛毛蟲花紋（用水墨紋理，不用彩色也能有差異）===== */
+.cat-leaf{ background-image:
+  radial-gradient(circle at 32% 55%, rgba(0,0,0,.70) 0 16px, transparent 17px),
+  radial-gradient(circle at 46% 55%, rgba(0,0,0,.68) 0 18px, transparent 19px),
+  radial-gradient(circle at 60% 55%, rgba(0,0,0,.66) 0 20px, transparent 21px),
+  radial-gradient(circle at 74% 55%, rgba(0,0,0,.62) 0 22px, transparent 23px),
+  radial-gradient(circle at 86% 52%, rgba(0,0,0,.60) 0 12px, transparent 13px),
+  repeating-linear-gradient(45deg, rgba(0,0,0,.10) 0 4px, transparent 4px 9px);
+}
+.cat-sun{ filter: drop-shadow(0 12px 18px rgba(0,0,0,.14)); opacity:.98; }
+.cat-ink{ opacity:.88; }
+.cat-spot{ background-image:
+  radial-gradient(circle at 32% 55%, rgba(0,0,0,.70) 0 16px, transparent 17px),
+  radial-gradient(circle at 46% 55%, rgba(0,0,0,.68) 0 18px, transparent 19px),
+  radial-gradient(circle at 60% 55%, rgba(0,0,0,.66) 0 20px, transparent 21px),
+  radial-gradient(circle at 74% 55%, rgba(0,0,0,.62) 0 22px, transparent 23px),
+  radial-gradient(circle at 86% 52%, rgba(0,0,0,.60) 0 12px, transparent 13px),
+  radial-gradient(circle at 40% 40%, rgba(0,0,0,.12) 0 10px, transparent 11px),
+  radial-gradient(circle at 62% 62%, rgba(0,0,0,.12) 0 9px, transparent 10px);
+}
 
-            <div class="stat">
-              <div class="label">生命</div>
-              <div class="bar thin"><div id="hpBar" class="fill"></div></div>
-              <div id="hpText" class="value">0 / 10</div>
-            </div>
+/* ===== 蝴蝶品種（同樣用紋理區分）===== */
+.bfly-leaf{ opacity:1; }
+.bfly-sun{ filter: drop-shadow(0 14px 20px rgba(0,0,0,.18)); }
+.bfly-ink{ opacity:.85; }
+.bfly-spot{ opacity:.92; }
 
-            <div class="stat">
-              <div class="label">心境</div>
-              <div class="bar thin"><div id="moodBar" class="fill"></div></div>
-              <div id="moodText" class="value">0 / 10</div>
-            </div>
+/* ===== 天敵事件卡 ===== */
+.enemy{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.42);
+  display:grid; place-items:center;
+  padding:20px;
+  z-index:55;
+}
+.enemyCard{
+  width:min(720px, 92vw);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.35);
+  background: linear-gradient(180deg, rgba(246,241,230,.95), rgba(239,230,214,.92));
+  box-shadow: 0 20px 60px rgba(0,0,0,.28);
+  padding:18px;
+}
+.enemyBtns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.enemyTip{ margin-top:10px; font-size:12px; opacity:.65; font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif; }
 
-            <div class="stat">
-              <div class="label">警戒</div>
-              <div class="bar thin"><div id="guardBar" class="fill"></div></div>
-              <div id="guardText" class="value">0 / 10</div>
-            </div>
-
-            <div class="stat">
-              <div class="label">飢餓</div>
-              <div class="bar thin"><div id="hungerBar" class="fill"></div></div>
-              <div id="hungerText" class="value">0 / 10</div>
-            </div>
-          </div>
-
-          <div class="actions">
-            <button class="btn" id="btnFeed">🌿 餵食</button>
-            <button class="btn" id="btnSun">☀️ 曬陽</button>
-            <button class="btn" id="btnDew">💧 喝露</button>
-            <button class="btn" id="btnSilk">🧶 吐絲</button>
-            <button class="btn" id="btnGuard">👀 警戒</button>
-            <button class="btn" id="btnRest">💤 歇息</button>
-            <button class="btn ghost" id="btnReset">↺ 重來</button>
-          </div>
-
-          <!-- 詩詞短卡 -->
-          <div id="toast" class="toast" role="status" aria-live="polite"></div>
-          <div class="hint">小提示：可以「戳毛毛蟲」互動；連戳太吵會引來天敵。</div>
-        </div>
-      </div>
-
-      <!-- 進化大卡 -->
-      <div id="modal" class="modal hidden" aria-hidden="true">
-        <div class="modalCard">
-          <div class="modalHeader">
-            <span id="modalTitle" class="modalTitle">進化</span>
-            <button id="modalClose" class="close">✕</button>
-          </div>
-          <div id="modalPoem" class="modalPoem"></div>
-          <div id="modalAuthor" class="modalAuthor"></div>
-          <div class="modalHint">（關閉後繼續養成）</div>
-        </div>
-      </div>
-
-      <!-- 天敵事件卡 -->
-      <div id="enemy" class="enemy hidden" aria-hidden="true">
-        <div class="enemyCard">
-          <h2 id="enemyTitle">天敵來襲</h2>
-          <p id="enemyDesc">……</p>
-          <div class="enemyBtns">
-            <button class="btn" id="btnHide">🍃 躲葉背</button>
-            <button class="btn" id="btnScare">🧶 吐絲嚇退</button>
-            <button class="btn" id="btnRun">💨 快跑</button>
-          </div>
-          <div class="enemyTip">（選一個反應，成功會有獎勵）</div>
-        </div>
-      </div>
-
-      <!-- 結局 -->
-      <div id="ending" class="ending hidden" aria-hidden="true">
-        <div class="endingCard">
-          <h2 id="endingTitle">結局</h2>
-          <div id="endingPoem" class="endingPoem"></div>
-          <div id="endingBreed" class="endingBreed"></div>
-          <div class="endingTools">
-            <button class="btn" id="btnCopy">複製結局文字</button>
-            <button class="btn ghost" id="btnBack">回到封面</button>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <script src="game.js" defer></script>
-</body>
-</html>
+/* 結局品種顯示 */
+.endingBreed{ opacity:.8; margin-top:6px; font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif; }
