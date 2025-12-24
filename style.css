@@ -95,3 +95,9 @@ body{ display:block; }
 
 /* 結局品種顯示 */
 .endingBreed{ opacity:.8; margin-top:6px; font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif; }
+.hidden { display: none !important; }
+
+.scene { position: relative; }
+.creature { position: absolute; z-index: 30; pointer-events: auto; }
+.fxLayer { pointer-events: none; z-index: 40; }
+.inkwash { z-index: 1; pointer-events: none; }
