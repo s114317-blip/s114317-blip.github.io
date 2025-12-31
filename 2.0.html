@@ -1,1 +1,124 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>破繭成詩｜水墨養成</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="frame">
+    <header class="title">
+      <div class="seal">印</div>
+      <h1>破繭成詩</h1>
+      <p class="subtitle">戳牠、養牠、護牠——終將化蝶</p>
+    </header>
 
+    <section class="panel full">
+      <div class="game">
+        <div class="scene">
+          <div id="stageBadge" class="badge">毛毛蟲</div>
+
+          <!-- 可戳的主角 -->
+          <div id="creature" class="creature caterpillar cat-leaf" aria-label="creature"></div>
+
+          <!-- 特效層 -->
+          <div id="fxLayer" class="fxLayer"></div>
+
+          <div class="inkwash"></div>
+        </div>
+
+        <div class="side">
+          <div class="stats">
+            <div class="stat">
+              <div class="label">成長</div>
+              <div class="bar"><div id="growthBar" class="fill"></div></div>
+              <div id="growthText" class="value">0 / 100</div>
+            </div>
+
+            <div class="stat">
+              <div class="label">生命</div>
+              <div class="bar thin"><div id="hpBar" class="fill"></div></div>
+              <div id="hpText" class="value">0 / 10</div>
+            </div>
+
+            <div class="stat">
+              <div class="label">心境</div>
+              <div class="bar thin"><div id="moodBar" class="fill"></div></div>
+              <div id="moodText" class="value">0 / 10</div>
+            </div>
+
+            <div class="stat">
+              <div class="label">警戒</div>
+              <div class="bar thin"><div id="guardBar" class="fill"></div></div>
+              <div id="guardText" class="value">0 / 10</div>
+            </div>
+
+            <div class="stat">
+              <div class="label">飢餓</div>
+              <div class="bar thin"><div id="hungerBar" class="fill"></div></div>
+              <div id="hungerText" class="value">0 / 10</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="btnFeed">🌿 餵食</button>
+            <button class="btn" id="btnSun">☀️ 曬陽</button>
+            <button class="btn" id="btnDew">💧 喝露</button>
+            <button class="btn" id="btnSilk">🧶 吐絲</button>
+            <button class="btn" id="btnGuard">👀 警戒</button>
+            <button class="btn" id="btnRest">💤 歇息</button>
+            <button class="btn ghost" id="btnReset">↺ 重來</button>
+          </div>
+
+          <!-- 詩詞短卡 -->
+          <div id="toast" class="toast" role="status" aria-live="polite"></div>
+          <div class="hint">小提示：可以「戳毛毛蟲」互動；連戳太吵會引來天敵。</div>
+        </div>
+      </div>
+
+      <!-- 進化大卡 -->
+      <div id="modal" class="modal hidden" aria-hidden="true">
+        <div class="modalCard">
+          <div class="modalHeader">
+            <span id="modalTitle" class="modalTitle">進化</span>
+            <button id="modalClose" class="close">✕</button>
+          </div>
+          <div id="modalPoem" class="modalPoem"></div>
+          <div id="modalAuthor" class="modalAuthor"></div>
+          <div class="modalHint">（關閉後繼續養成）</div>
+        </div>
+      </div>
+
+      <!-- 天敵事件卡 -->
+      <div id="enemy" class="enemy hidden" aria-hidden="true">
+        <div class="enemyCard">
+          <h2 id="enemyTitle">天敵來襲</h2>
+          <p id="enemyDesc">……</p>
+          <div class="enemyBtns">
+            <button class="btn" id="btnHide">🍃 躲葉背</button>
+            <button class="btn" id="btnScare">🧶 吐絲嚇退</button>
+            <button class="btn" id="btnRun">💨 快跑</button>
+          </div>
+          <div class="enemyTip">（選一個反應，成功會有獎勵）</div>
+        </div>
+      </div>
+
+      <!-- 結局 -->
+      <div id="ending" class="ending hidden" aria-hidden="true">
+        <div class="endingCard">
+          <h2 id="endingTitle">結局</h2>
+          <div id="endingPoem" class="endingPoem"></div>
+          <div id="endingBreed" class="endingBreed"></div>
+          <div class="endingTools">
+            <button class="btn" id="btnCopy">複製結局文字</button>
+            <button class="btn ghost" id="btnBack">回到封面</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<script src="game.js?v=3" defer></script>
+</body>
+</html>
