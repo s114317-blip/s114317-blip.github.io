@@ -62,7 +62,14 @@
           </div>
 
           <div class="actions">
-            <button class="btn" id="btnFeed">🌿 餵食</button>
+            <!-- 葉子托盤：拖曳葉子到毛毛蟲 = 餵食 -->
+<div class="leafTray" id="leafTray" aria-label="葉子托盤">
+  <div class="leaf" draggable="true" title="拖曳我去餵毛毛蟲"></div>
+  <div class="leaf" draggable="true" title="拖曳我去餵毛毛蟲"></div>
+  <div class="leaf" draggable="true" title="拖曳我去餵毛毛蟲"></div>
+</div>
+<div class="leafHint">🍃 用滑鼠拖曳葉子 → 丟到毛毛蟲身上餵食</div>
+
             <button class="btn" id="btnSun">☀️ 曬陽</button>
             <button class="btn" id="btnDew">💧 喝露</button>
             <button class="btn" id="btnSilk">🧶 吐絲</button>
