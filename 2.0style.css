@@ -1,1 +1,267 @@
+/* ===== 全螢幕版面 ===== */
+body{ display:block; }
+.frame{ width:100vw; min-height:100vh; padding:20px; }
+.panel.full{ min-height:calc(100vh - 80px); }
+.game{
+  display:grid;
+  grid-template-columns: 1.4fr .9fr;
+  gap:16px;
+  align-items:stretch;
+}
+.scene{ height: min(76vh, 720px); }
+.side{ display:flex; flex-direction:column; gap:12px; }
+.hint{ font-size:12px; opacity:.65; margin-top:2px; font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif; }
 
+@media (max-width: 900px){
+  .game{ grid-template-columns: 1fr; }
+  .scene{ height: min(60vh, 560px); }
+}
+
+/* ===== 特效層 ===== */
+.fxLayer{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:4; }
+
+.particle{
+  position:absolute;
+  left:50%; top:60%;
+  transform:translate(-50%,-50%);
+  opacity:.9;
+  animation: fly 900ms ease-out forwards;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,.12));
+}
+@keyframes fly{
+  from{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+  to  { transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.9); opacity:0; }
+}
+.p-leaf{ width:16px; height:10px; border-radius: 12px 12px 12px 0; background:rgba(0,0,0,.55); transform:rotate(20deg); }
+.p-sun{ width:14px; height:14px; border-radius:50%; background:rgba(0,0,0,.45); box-shadow:0 0 0 7px rgba(0,0,0,.08); }
+.p-dew{ width:10px; height:14px; border-radius: 50% 50% 55% 55%; background:rgba(0,0,0,.35); }
+.p-ink{ width:10px; height:10px; border-radius:50%; background:rgba(0,0,0,.35); }
+
+/* ===== 戳毛毛蟲互動動畫 ===== */
+.creature{ cursor:pointer; }
+.poke{ animation: pokeWiggle 260ms ease-in-out 1; }
+@keyframes pokeWiggle{
+  0%{ transform:translate(-50%,-50%) scale(1); }
+  30%{ transform:translate(-50%,-52%) scale(1.04) rotate(-2deg); }
+  60%{ transform:translate(-50%,-48%) scale(0.98) rotate(2deg); }
+  100%{ transform:translate(-50%,-50%) scale(1); }
+}
+
+/* ===== 毛毛蟲花紋（用水墨紋理，不用彩色也能有差異）===== */
+.cat-leaf{ background-image:
+  radial-gradient(circle at 32% 55%, rgba(0,0,0,.70) 0 16px, transparent 17px),
+  radial-gradient(circle at 46% 55%, rgba(0,0,0,.68) 0 18px, transparent 19px),
+  radial-gradient(circle at 60% 55%, rgba(0,0,0,.66) 0 20px, transparent 21px),
+  radial-gradient(circle at 74% 55%, rgba(0,0,0,.62) 0 22px, transparent 23px),
+  radial-gradient(circle at 86% 52%, rgba(0,0,0,.60) 0 12px, transparent 13px),
+  repeating-linear-gradient(45deg, rgba(0,0,0,.10) 0 4px, transparent 4px 9px);
+}
+.cat-sun{ filter: drop-shadow(0 12px 18px rgba(0,0,0,.14)); opacity:.98; }
+.cat-ink{ opacity:.88; }
+.cat-spot{ background-image:
+  radial-gradient(circle at 32% 55%, rgba(0,0,0,.70) 0 16px, transparent 17px),
+  radial-gradient(circle at 46% 55%, rgba(0,0,0,.68) 0 18px, transparent 19px),
+  radial-gradient(circle at 60% 55%, rgba(0,0,0,.66) 0 20px, transparent 21px),
+  radial-gradient(circle at 74% 55%, rgba(0,0,0,.62) 0 22px, transparent 23px),
+  radial-gradient(circle at 86% 52%, rgba(0,0,0,.60) 0 12px, transparent 13px),
+  radial-gradient(circle at 40% 40%, rgba(0,0,0,.12) 0 10px, transparent 11px),
+  radial-gradient(circle at 62% 62%, rgba(0,0,0,.12) 0 9px, transparent 10px);
+}
+
+/* ===== 蝴蝶品種（同樣用紋理區分）===== */
+.bfly-leaf{ opacity:1; }
+.bfly-sun{ filter: drop-shadow(0 14px 20px rgba(0,0,0,.18)); }
+.bfly-ink{ opacity:.85; }
+.bfly-spot{ opacity:.92; }
+
+/* ===== 天敵事件卡 ===== */
+.enemy{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.42);
+  display:grid; place-items:center;
+  padding:20px;
+  z-index:55;
+}
+.enemyCard{
+  width:min(720px, 92vw);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.35);
+  background: linear-gradient(180deg, rgba(246,241,230,.95), rgba(239,230,214,.92));
+  box-shadow: 0 20px 60px rgba(0,0,0,.28);
+  padding:18px;
+}
+.enemyBtns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.enemyTip{ margin-top:10px; font-size:12px; opacity:.65; font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif; }
+
+/* 結局品種顯示 */
+.endingBreed{ opacity:.8; margin-top:6px; font-family: ui-sans-serif, system-ui, -apple-system, "Noto Sans TC", sans-serif; }
+.hidden { display: none !important; }
+
+.scene { position: relative; }
+.creature { position: absolute; z-index: 30; pointer-events: auto; }
+.fxLayer { pointer-events: none; z-index: 40; }
+.inkwash { z-index: 1; pointer-events: none; }
+/* ===== 保命版：強制畫出毛毛蟲 ===== */
+
+.scene {
+  position: relative;
+  min-height: 100vh;
+}
+
+.creature {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 260px;
+  height: 140px;
+
+  background: linear-gradient(
+    to right,
+    #4a7c59,
+    #6fbf73,
+    #4a7c59
+  );
+
+  border-radius: 80px;
+  box-shadow: 0 0 0 6px rgba(0,0,0,0.15);
+
+  z-index: 30;
+  cursor: pointer;
+}
+
+/* 毛毛蟲節點（一節一節的感覺） */
+.creature::before,
+.creature::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  width: 80px;
+  height: 80px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+}
+
+.creature::before { left: 40px; }
+.creature::after  { right: 40px; }
+
+/* 進化階段（先保底） */
+.caterpillar { }
+.chrysalis {
+  width: 140px;
+  height: 220px;
+  border-radius: 70px;
+  background: #6b5b4b;
+}
+.butterfly {
+  width: 220px;
+  height: 160px;
+  background: radial-gradient(circle at center, #f2d16b, #d18b47);
+  border-radius: 20px;
+}
+/* ===== 葉子拖曳餵食 UI ===== */
+.leafTray{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:10px 12px;
+  background: rgba(255,255,255,0.42);
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 14px;
+  width: fit-content;
+  backdrop-filter: blur(6px);
+}
+
+.leafHint{
+  margin-top: 6px;
+  font-size: 13px;
+  color: rgba(0,0,0,0.55);
+}
+
+.leaf{
+  width: 46px;
+  height: 30px;
+  border-radius: 999px 999px 999px 30px;
+  transform: rotate(-18deg);
+  background: radial-gradient(circle at 30% 40%, rgba(255,255,255,.35), transparent 45%),
+              linear-gradient(135deg, rgba(20,90,40,.95), rgba(60,170,90,.85));
+  box-shadow: 0 8px 14px rgba(0,0,0,0.18);
+  cursor: grab;
+  position: relative;
+}
+.leaf:active{ cursor: grabbing; }
+.leaf::after{
+  content:"";
+  position:absolute;
+  left: 10px;
+  top: 6px;
+  width: 24px;
+  height: 2px;
+  background: rgba(255,255,255,0.35);
+  transform: rotate(18deg);
+  border-radius: 99px;
+}
+
+/* 拖曳到毛毛蟲上時的提示 */
+.creature.dropReady{
+  outline: 3px dashed rgba(0,0,0,0.35);
+  outline-offset: 10px;
+}
+
+/* ===== 蝴蝶：依顏色品種改外觀（不用你抓 SVG）===== */
+.creature.butterfly{
+  width: 340px;
+  height: 220px;
+  border-radius: 22px;
+  background: var(--bf-bg, rgba(0,0,0,.55));
+  filter: drop-shadow(0 18px 22px rgba(0,0,0,.18));
+}
+
+/* 讓蝴蝶看起來像有翅膀（純 CSS） */
+.creature.butterfly::before,
+.creature.butterfly::after{
+  content:"";
+  position:absolute;
+  top: 18px;
+  width: 48%;
+  height: 72%;
+  background: var(--bf-wing, rgba(0,0,0,.45));
+  border-radius: 80% 40% 70% 50%;
+  opacity: 0.95;
+  filter: blur(0.2px);
+}
+.creature.butterfly::before{ left: 8px; transform: rotate(-10deg); }
+.creature.butterfly::after { right: 8px; transform: rotate(10deg) scaleX(-1); }
+
+/* 6 種顏色品種（由玩家養成方式決定） */
+.bf-emerald{ /* 偏愛餵食：翠綠蝶 */
+  --bf-bg: radial-gradient(circle at 50% 45%, rgba(30,110,60,.9), rgba(10,40,25,.75));
+  --bf-wing: radial-gradient(circle at 40% 40%, rgba(140,255,190,.35), transparent 55%),
+             linear-gradient(135deg, rgba(15,80,45,.92), rgba(60,175,110,.75));
+}
+.bf-gold{ /* 偏愛曬陽：金暉蝶 */
+  --bf-bg: radial-gradient(circle at 55% 40%, rgba(240,200,90,.72), rgba(120,70,20,.55));
+  --bf-wing: radial-gradient(circle at 45% 40%, rgba(255,255,255,.25), transparent 55%),
+             linear-gradient(135deg, rgba(245,210,95,.78), rgba(150,85,25,.60));
+}
+.bf-azure{ /* 偏愛露水：青藍蝶 */
+  --bf-bg: radial-gradient(circle at 45% 45%, rgba(70,140,200,.75), rgba(20,40,70,.60));
+  --bf-wing: radial-gradient(circle at 35% 35%, rgba(255,255,255,.22), transparent 55%),
+             linear-gradient(135deg, rgba(55,120,185,.78), rgba(25,45,90,.62));
+}
+.bf-ink{ /* 偏愛吐絲：墨影蝶 */
+  --bf-bg: repeating-linear-gradient(25deg, rgba(0,0,0,.78) 0 6px, rgba(0,0,0,.55) 6px 12px, rgba(0,0,0,.70) 12px 18px);
+  --bf-wing: radial-gradient(circle at 40% 40%, rgba(255,255,255,.10), transparent 55%),
+             repeating-linear-gradient(35deg, rgba(0,0,0,.75) 0 7px, rgba(0,0,0,.40) 7px 14px);
+}
+.bf-crimson{ /* 偏愛警戒：朱紅蝶 */
+  --bf-bg: radial-gradient(circle at 50% 45%, rgba(170,40,45,.78), rgba(60,10,15,.55));
+  --bf-wing: radial-gradient(circle at 40% 40%, rgba(255,220,220,.18), transparent 60%),
+             linear-gradient(135deg, rgba(165,35,45,.78), rgba(70,10,15,.62));
+}
+.bf-silver{ /* 偏愛歇息：銀灰蝶 */
+  --bf-bg: radial-gradient(circle at 50% 45%, rgba(240,240,240,.55), rgba(60,60,60,.35));
+  --bf-wing: radial-gradient(circle at 35% 35%, rgba(255,255,255,.30), transparent 55%),
+             linear-gradient(135deg, rgba(240,240,240,.55), rgba(80,80,80,.35));
+}
